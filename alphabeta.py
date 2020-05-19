@@ -105,7 +105,7 @@ class State:
             print("")
 
 
-    def score(self, depth = 1):
+    def alpha(self, alpha, beta):
         # 手番が来たけど負けていた
         if self.lose():
             return -100
@@ -120,32 +120,26 @@ class State:
         for candidate in self.legal_moves():
             # score = self.move(candidate).score()
             next_state = self.move(candidate)
-            score = -next_state.score()
+            score = -next_state.alpha(-beta, -alpha)
 
-            if score > best_score:
-                best_score = score
+            if score > alpha:
+                alpha = score
 
-        return best_score - depth
+            if alpha >= beta:
+                return alpha
+
+        return alpha
 
     def best_move(self):
-        best_score = -999999
-        best_move = None
+        alpha = -999999
 
-        # 取れる手を全部見る
         for candidate in self.legal_moves():
-
-            # 手を仮定してみる
             next_state = self.move(candidate)
+            score = -next_state.alpha(-999999, -alpha)
 
-            # 仮定した手のスコア
-            # 相手の手番のスコアは最悪のものが自分にとっては最善
-            score = next_state.score() * -1
-
-            print(f"着手可能点{candidate}, score = {score}")
-
-            if score > best_score:
-                best_score = score
+            if score > alpha:
                 best_move = candidate
+                alpha = score
 
         return best_move
 

@@ -1,5 +1,5 @@
 import copy
-import random
+import random_bot
 
 class State:
     def __init__(self, player = 1, board = None):
@@ -108,7 +108,7 @@ def main():
     flag = state.end()
     while flag == False:
         legal_moves = state.legal_moves()
-        state = state.move(random.choice(legal_moves))
+        state = state.move(random_bot.choice(legal_moves))
         state.print_board()
         flag = state.end()
 
